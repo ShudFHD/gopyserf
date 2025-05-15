@@ -1,20 +1,40 @@
-# Updated 5 Nodes Topology with Serf & Containerlab & K3s & Custom Scedhuler & Controller DaemonSet
-The updated file will run everything mentioned in the heading,
-- Custom Scheduler:
-    - Makes scheduling decisions based on node resource data.
-    - Pulls metrics from the "resource-api" container in the DaemonSet.
-    - Metrics include CPU, memory, and PSI-based sellable cores.
+# Updated 5-Node Topology with Serf, Containerlab, K3s, Custom Scheduler, and Controller DaemonSet
 
-- Controller DaemonSet:
-    - Runs on every node.
-    - Monitors node pressure and resource usage.
-    - Writes node offers to: /tmp/resource_offer.json
-    - Hosts a local HTTP API to expose resource state.
+This repository provides a complete 5-node Kubernetes-based topology using Containerlab. Each node is configured with:
 
-- Liqo :
-    - Need to be updated. You will see the liqo trying to install via ceos5node.yaml file in each but some issue, not able to install yet need to change.
+- Serf for decentralized cluster membership
+- K3s as the lightweight Kubernetes distribution
+- A custom Kubernetes scheduler
+- A controller DaemonSet that exposes real-time node resource metrics
 
-## For Starting run the below command mentioned and you will have a 5 containers running in a containerlab, with serf, k3s installed, custom scheduler pod and Daemonset. For testing the scheduler there is a test pod in the /tmp/ folder you can run it and check the logs of the custom scheduler pod.
+## Files Included
+
+- `ceos5node.yaml`: Main topology file defining nodes and configuration
+- `Dockerfile`: Builds the base image used by each node
+- `test-pod.yaml`: Test pod manifest for verifying the custom scheduler
+
+## Components
+
+### Custom Scheduler
+
+- Makes pod scheduling decisions based on actual node resource availability
+- Pulls metrics from the `resource-api` container running in the controller DaemonSet
+- Considers CPU usage, memory usage, PSI (Pressure Stall Information), and available cores
+
+### Controller DaemonSet
+
+- Runs on every node in the topology
+- Continuously monitors system-level resource usage
+- Outputs current resource offers to `/tmp/resource_offer.json`
+- Exposes an HTTP API on port 8080 for the scheduler to query node status
+
+### Liqo Integration
+
+- Liqo installation is initiated through the `ceos5node.yaml` file
+- Currently under development — some issues may prevent successful installation
+- Manual updates may be required to complete Liqo federation
+
+## For deployment follow information below.
 
 # 5 Nodes Topology with Serf & Containerlab
 
