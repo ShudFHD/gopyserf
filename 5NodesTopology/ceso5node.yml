@@ -140,7 +140,7 @@ topology:
 
     serf5:
       kind: linux
-      image:  abdullahmuzlim279/k3s-serf-v1:latest
+      image:  abdullahmuzlim279/k3s-serf-node:latest
       env:
         CLAB_LINUX_PRIVILEGED: "true"
       binds:
