@@ -67,7 +67,7 @@ This project sets up a 5-node network topology using [Containerlab](https://cont
 
 ```bash
 # Step 1: Clone the repo
-git clone https://github.com/anjumm/gopyserf.git
+git clone https://github.com/abmuslim/gopyserf.git
 
 # Step 2: Deploy the topology
 sudo containerlab deploy -t ceso5node.yml
