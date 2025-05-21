@@ -13,6 +13,7 @@ topology:
       env:
         CLAB_LINUX_PRIVILEGED: "true"
       binds:
+        - ./k3s_liqo_startup.sh:/k3s_liqo_startup.sh:ro            
         - /sys/fs/cgroup:/sys/fs/cgroup:rw
         - /lib/modules:/lib/modules:ro
         - /dev:/dev
@@ -31,24 +32,8 @@ topology:
           ip addr add 10.0.1.{{ i + 10 }}/24 brd 10.0.1.255 dev eth1
           ip route del default via 172.20.20.1 dev eth0
           ip route add default via 10.0.1.1 dev eth1
-          sleep 15
-          sudo ip link set eth1 mtu 1400
-          k3s server --node-name serf{{ i }} --disable traefik --disable-network-policy --snapshotter native &
-          sleep 15
-          chmod 666 /etc/rancher/k3s/k3s.yaml
-          export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
-          ip route del default via 10.0.1.1 dev eth1
-          ip route add default via 172.20.20.1 dev eth0
-          sleep 150
-          liqoctl install k3s --kubeconfig /etc/rancher/k3s/k3s.yaml --cluster-id serf{{ i }}
-          k3s kubectl apply -f /tmp/qos-controller-daemonset.yaml
-          k3s kubectl apply -f /tmp/service-account.yaml
-          k3s kubectl apply -f /tmp/cluster-role.yaml
-          k3s kubectl apply -f /tmp/cluster-role-binding.yaml
-          k3s kubectl apply -f /tmp/deployment-scheduler.yaml
-          sudo mv /etc/rancher/k3s/k3s.yaml ~/.kube/config
-          sudo chown $(whoami):$(whoami) ~/.kube/config
-          sudo chmod 600 ~/.kube/config
+          sudo chmod +x k3s_liqo_startup.sh
+          ./k3s_liqo_startup.sh {{ i }}
           sleep infinity
         '
     {% endfor %}
