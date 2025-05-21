@@ -69,11 +69,11 @@ This project sets up a 5-node network topology using [Containerlab](https://cont
 # Step 1: Clone the repo
 git clone https://github.com/abmuslim/gopyserf.git
 
-# Step 2: Deploy the topology
-sudo containerlab deploy -t ceso5node.yml
+# Step 2: Create the topology
+python3 generate_topology.py --nodes=5
 
-# Step 3: Assign IPs
-./ipaddressing.sh
+# Step 3: Deploy the topology
+sudo containerlab deploy -t century_clab.yaml
 
 # Step 4: Start Serf agents
 ./serf_agents_start.sh
